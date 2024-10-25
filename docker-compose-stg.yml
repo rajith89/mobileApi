@@ -1,0 +1,25 @@
+version: '2'
+services:
+  backend:
+    image: 'udipoc/udi-poc-mobile-api:0.0.0.1'
+    extra_hosts:
+      - 'testsludi.lgcc.gov.lk:192.168.204.7'
+    ports:
+      - '8180:8180'
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://192.168.204.7:30090/icta_mobileservice?zeroDateTimeBehavior=convertToNull
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: mosip123
+      SPRING_PROFILES_ACTIVE: stg
+    depends_on:
+      - redishost
+    links:
+      - 'redishost'
+
+  redishost:
+    image: 'redis'
+    ports:
+      - '6379:6379'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
